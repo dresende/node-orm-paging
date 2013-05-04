@@ -20,7 +20,7 @@ Any driver supported by ORM is supported by this plugin.
 
 ```js
 Model.pages(cb)   // total pages
-Model.page(page) // get page
+Model.page(page)  // get page
 ```
 
 ## Example

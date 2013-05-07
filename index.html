@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>ORM Paging by dresende</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>ORM Paging</h1>
+        <p>ORM Pagination Plugin</p>
+
+        <p class="view"><a href="https://github.com/dresende/node-orm-paging">View the Project on GitHub <small>dresende/node-orm-paging</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/dresende/node-orm-paging/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/dresende/node-orm-paging/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/dresende/node-orm-paging">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>ORM Pagination Helper Plugin</h2>
+
+<p>This plugin adds a pagination helper function for <a href="http://github.com/dresende/node-orm2">ORM</a>.</p>
+
+<h2>Dependencies</h2>
+
+<p>Of course you need <code>orm</code> to use it. Other than that, no more dependencies.</p>
+
+<h2>Install <a href="https://npmjs.org/package/orm-paging"><img src="https://badge.fury.io/js/orm-paging.png" alt=""></a>
+</h2>
+
+<div class="highlight"><pre>npm install orm-paging
+</pre></div>
+
+<h2>DBMS Support</h2>
+
+<p>Any driver supported by ORM is supported by this plugin.</p>
+
+<h2>Usage</h2>
+
+<div class="highlight"><pre><span class="nx">Model</span><span class="p">.</span><span class="nx">pages</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span>   <span class="c1">// total pages</span>
+<span class="nx">Model</span><span class="p">.</span><span class="nx">page</span><span class="p">(</span><span class="nx">page</span><span class="p">)</span>  <span class="c1">// get page</span>
+</pre></div>
+
+<h2>Example</h2>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">orm</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"orm"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">paging</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"orm-paging"</span><span class="p">);</span>
+
+<span class="nx">orm</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">"mysql://username:password@host/database"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">db</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+
+    <span class="nx">db</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">paging</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">"person"</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">name</span>      <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+        <span class="nx">surname</span>   <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+        <span class="nx">age</span>       <span class="o">:</span> <span class="nb">Number</span>
+    <span class="p">});</span>
+    <span class="nx">Person</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">"pagination.perpage"</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span> <span class="c1">// default is 20</span>
+
+    <span class="nx">Person</span><span class="p">.</span><span class="nx">pages</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Total pages: %d"</span><span class="p">,</span> <span class="nx">pages</span><span class="p">);</span>
+
+        <span class="nx">Person</span><span class="p">.</span><span class="nx">page</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">order</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">people</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// should get you page 3, which means people from index 20 to 29 (ordered by name)</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/dresende">dresende</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

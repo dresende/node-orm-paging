@@ -1,6 +1,6 @@
 ## ORM Pagination Helper Plugin [![](https://badge.fury.io/js/orm-paging.png)](https://npmjs.org/package/orm-paging)
 
-This plugin adds a pagination helper function for [ORM](http://github.com/dresende/node-orm2).
+This plugin adds a pagination helper function for [ORM](http://dresende.github.io/node-orm2).
 
 ## Dependencies
 

@@ -19,8 +19,8 @@ Any driver supported by ORM is supported by this plugin.
 ## Usage
 
 ```js
-Model.pages(cb)   // total pages
-Model.page(page)  // get page
+Model.pages([conditions, ]cb)   // total pages
+Model.page([conditions, ]page)  // get page
 ```
 
 ## Example
@@ -48,6 +48,14 @@ orm.connect("mysql://username:password@host/database", function (err, db) {
 			// should get you page 3, which means people from index 20 to 29 (ordered by name)
 		});
 	});
+	
+	Person.pages({age: orm.gt(3)}, function(err, pages) {
+	    console.log("Total pages: %d", pages);
+      
+        Person.page({age: orm.gt(3)}, 3).order("name").run(function (err, people) {
+            // should get you page 3, which means people who's age is greater than 3 from index 20 to 29 (ordered by name)
+        });
+	})
 });
 ```
 
